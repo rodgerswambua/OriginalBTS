@@ -153,7 +153,10 @@ public class About extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Rmajor bus reservstion system is an online ticketing system which makes you book your seat at the comfort of your house.Just by visiting or website ypu will be able to reserve your place.Thats  all.");
+        jTextArea1.setText("Coast Bus Booking system is a system which allows Coast Bus stuff Perform most of activities electronically without
+            the use of manual pen and papers.All actvities are electronised beginning from point of origin , destinstion ,date of travel, customers details
+            upto printing of the travelling receipt.The amazing part of all is that Coast Bus System does not use any data connection making it 
+            suitable even in remote areas.Isnt it great!!!");
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
