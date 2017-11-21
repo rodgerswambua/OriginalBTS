@@ -1,0 +1,91 @@
+h1{
+	color:orange;
+	text-align: center;
+	
+}
+body{
+	background-color: gray;
+	background-image: url(Icons/background.jpg);
+}
+p{
+	text-decoration: inherit;
+	color: black;
+	text-align: left;
+}
+ul li{
+float:left;
+height:10px;
+font-size: 20px ;
+line-height:10px;
+text-align: top;
+opacity: .8;
+padding: 20px;
+background-color:none;
+}ul li a{
+text-decoration:bold;
+color:red;
+display: block;
+}
+
+ul li a:hover{
+	background-color: orange;
+}
+ul li ul li{
+	display:none;
+}
+ul li:hover ul li{
+	display: block;
+	color: violet;
+}
+a:hover{
+	color: white;
+}
+@keyframes slider{
+0%{
+	left: 0;
+}
+20%{
+	left: 0;
+}
+25%{
+	left: -100%;
+}
+45%{
+	left: -100%;
+}
+50%{
+	left: -200%;
+}
+70%{
+	left: -200%;
+}
+75%{
+	left: -300%;
+}
+95%{
+	left: -300%;
+}
+100%{
+	left: -400%;
+}
+}
+#slider{
+	overflow: hidden;
+}
+#slider figure img{
+	width: 20%;
+	float: left;
+}
+#slider figure{
+	position: relative;
+	width: 500%;
+	margin: 0;
+	left: 0;
+	text-align: left;
+	font-size: 0;
+	animation: 20s slider infinite ;
+}
+
+
+
+
