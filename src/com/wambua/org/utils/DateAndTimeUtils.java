@@ -5,6 +5,7 @@
  */
 package com.wambua.org.utils;
 
+import com.toedter.calendar.JDateChooser;
 import java.time.LocalDate;
 import java.util.Calendar;
 
@@ -22,5 +23,9 @@ public class DateAndTimeUtils {
         LocalDate localDate = LocalDate.of(year,(month + 1),day);
         
         return localDate;
+    }
+
+    public static Object parseCalendarToLocalDate(JDateChooser jDateChooser1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

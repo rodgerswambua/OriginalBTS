@@ -1,5 +1,6 @@
 package com.wambua.org.dao;
 
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,6 +17,7 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
  *
  * This class deals with all db access and transaction needs.
@@ -30,10 +32,96 @@ import javax.swing.JOptionPane;
  * accessed in all classes of a particular package.
  * @author wcb family
  */
-public class DatabaseAccessObjects {
 
-    public static void main(String[] args) {
-        System.err.println(Boolean.hashCode(true));
+public class DatabaseAccessObjects {
+     private static String databaseName;
+    public static String companyName = "";
+//
+//    public static void setServletConnectionDb(String dbName) {
+//        databaseName = dbName;
+//    }
+//     public static Connection getBusConnection() {
+//        Connection dbConnection = null;
+//        try {
+//            dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/busmanagementsystem?autoReconnect=true&useSSL=false", "root", "123");
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null,ex.getMessage(),"Rodgermajor ticketing System",JOptionPane.INFORMATION_MESSAGE);
+//            return null;
+//        }
+//        return dbConnection;
+//    }
+
+    public static String getCompanyName() {
+         companyName = "";
+        try {
+              Connection conn = javaconnect.ConnectDb();
+              PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT companyName FROM companyDetails ");
+//            preparedStatement.setString(1, databaseName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                companyName = resultSet.getString(1);
+            }
+            return companyName;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+    
+     public static String getCompanyAddress() {
+         companyName = "";
+        try {
+            Connection conn = javaconnect.ConnectDb();
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT companyAddress FROM companyDetails");
+//            preparedStatement.setString(1, databaseName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                companyName = resultSet.getString(1);
+            }
+            return companyName;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+     
+     
+     public static String getCompanyTelephoneNumber() {
+         companyName = "";
+        try {
+              Connection conn = javaconnect.ConnectDb();
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT companyPhone FROM companyDetails");
+//            preparedStatement.setString(1, databaseName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                companyName = resultSet.getString(1);
+            }
+            return companyName;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+     
+     public static String getCompanyEmailaddress() {
+         companyName = "";
+        try {
+            Connection conn = javaconnect.ConnectDb();
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "SELECT companyEmail FROM companyDetails ");
+//            preparedStatement.setString(1, databaseName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                companyName = resultSet.getString(1);
+            }
+            return companyName;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return "";
+        }
     }
 
     /**
@@ -44,8 +132,10 @@ public class DatabaseAccessObjects {
      * @param isBooked - Boolean
      */
     public static void updateCoachSeatBookingStatus(Integer seatNo, Boolean isBooked, String busname) {
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/busmanagementsystem?autoReconnect=true&useSSL=false","root","")) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + busname + " SET isBooked = ? WHERE seat_No = ?;");
+        try {
+            Connection conn = javaconnect.ConnectDb();
+            PreparedStatement preparedStatement = conn.prepareStatement(
+            "UPDATE " + busname + " SET isBooked = ? WHERE seatNo = ?;");
             preparedStatement.setInt(1, getBooleanIntValue(isBooked));
             preparedStatement.setInt(2, seatNo);
             preparedStatement.executeUpdate();
@@ -56,12 +146,16 @@ public class DatabaseAccessObjects {
         }
     }
 
-    public static Boolean checkBusSeatBookingStatus(Integer seatNo, String busname, String dot) {
+    public static Boolean checkBusSeatBookingStatus(Integer seatNo, String busname, String TravelDate) {
         Integer isBooked = 0;
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/busmanagementsystem?autoReconnect=true&useSSL=false", "root", "")) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT isBooked FROM " + busname + " WHERE seat_No = ? AND  TravelDate = ?;");
+        try {
+            Connection conn = javaconnect.ConnectDb();
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT isBooked FROM " + busname + " WHERE seatNo = ? AND  TravelDate = ?;");
+            
+         //   (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/busmanagementsystem?autoReconnect=true&useSSL=false", "root", "123")) {
+         //   PreparedStatement preparedStatement = connection.prepareStatement("SELECT isBooked FROM " + busname + " WHERE seatNo = ? AND  TravelDate = ?;");
             preparedStatement.setInt(1, seatNo);
-            preparedStatement.setString(2, dot);
+            preparedStatement.setString(2, TravelDate);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 isBooked = resultSet.getInt(1);
@@ -98,35 +192,35 @@ public class DatabaseAccessObjects {
         return value;
     }
 
-    public static void createBussBookingEntry(HashMap<String, String> hashMap) {
-        String sql = "Insert into buses (Regno, Bus_Name, Departure, VIP_seat, Normal_seat, VIP_fare, Normal_fare, `From`, Destination, DOT ) values ( ?,?,?,?,?,?,?,?,?,?)";
-        try {
-            Connection conn = javaconnect.ConnectrDb();
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, hashMap.get("regno"));
-            preparedStatement.setString(2, hashMap.get("bus_name"));
-            preparedStatement.setString(3, hashMap.get("depature"));
-            preparedStatement.setString(4, hashMap.get("vip_seat"));
-            preparedStatement.setString(5, hashMap.get("normal_seat"));
-            preparedStatement.setString(6, hashMap.get("vip_fare"));
-            preparedStatement.setString(7, hashMap.get("normal_fare"));
-            preparedStatement.setString(8, hashMap.get("from"));
-            preparedStatement.setString(9, hashMap.get("destination"));
-            preparedStatement.setString(10, hashMap.get("dot"));
-            preparedStatement.execute();
-
-            JOptionPane.showMessageDialog(null, " New Bus Added in to the system");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, e);
-        }
-    }
+//    public static void createBussBookingEntry(HashMap<String, String> hashMap) {
+//        String sql = "Insert into buses (Regno, Bus_Name, Departure, VIP_seat, Normal_seat, VIP_fare, Normal_fare, `From`, Destination, DOT ) values ( ?,?,?,?,?,?,?,?,?,?)";
+//        try {
+//            Connection conn = javaconnect.ConnectDb();
+//            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+//            preparedStatement.setString(1, hashMap.get("regno"));
+//            preparedStatement.setString(2, hashMap.get("bus_name"));
+//            preparedStatement.setString(3, hashMap.get("depature"));
+//            preparedStatement.setString(4, hashMap.get("vip_seat"));
+//            preparedStatement.setString(5, hashMap.get("normal_seat"));
+//            preparedStatement.setString(6, hashMap.get("vip_fare"));
+//            preparedStatement.setString(7, hashMap.get("normal_fare"));
+//            preparedStatement.setString(8, hashMap.get("from"));
+//            preparedStatement.setString(9, hashMap.get("destination"));
+//            preparedStatement.setString(10, hashMap.get("dot"));
+//            preparedStatement.execute();
+//
+//            JOptionPane.showMessageDialog(null, " New Bus Added in to the system");
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null, e);
+//        }
+//    }
 
     public static HashSet<String> getBusNames() {
         HashSet<String> busHashSet = new HashSet<>();
         try {
-            Connection conn = javaconnect.ConnectrDb();
+            Connection conn = javaconnect.ConnectDb();
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "SELECT bus_name FROM buses;");
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -145,7 +239,7 @@ public class DatabaseAccessObjects {
     public static boolean isBookingExists(String dot) {
         int count = 0;
         try {
-            Connection conn = javaconnect.ConnectrDb();
+            Connection conn = javaconnect.ConnectDb();
             PreparedStatement preparedStatement = conn.prepareStatement(
                     " SELECT COUNT(*) FROM buses WHERE dot = ?");
             preparedStatement.setString(1, dot);
@@ -164,7 +258,7 @@ public class DatabaseAccessObjects {
     public static HashSet<String> getBussNamesBasedOnTravelDate(String dot){
         HashSet<String> busNamesHashSet = new HashSet<>();
         try {
-            Connection conn = javaconnect.ConnectrDb();
+            Connection conn = javaconnect.ConnectDb();
             PreparedStatement preparedStatement = conn.prepareStatement(
                     "SELECT bus_name FROM buses WHERE dot = ?;");
             preparedStatement.setString(1, dot);
@@ -191,9 +285,9 @@ public class DatabaseAccessObjects {
     public static List<String> getBussNamesBasedOnTravelDateAndDestination(String from,String destination,String dot){
         List<String> busNamesHashSet = new ArrayList<>();
         try {
-            Connection conn = javaconnect.ConnectrDb();
+            Connection conn = javaconnect.ConnectDb();
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "SELECT bus_name FROM buses WHERE `from`= ? AND Destination = ? OR DOT = ? ORDER BY Departure ASC;");
+                    "SELECT bus_name FROM buses WHERE Bfrom = ? AND Destination = ? and DOT = ? ORDER BY Departure ASC;");
             preparedStatement.setString(1, from);
             preparedStatement.setString(2,destination);
             preparedStatement.setString(3, dot);

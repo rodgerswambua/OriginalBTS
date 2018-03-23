@@ -1,16 +1,22 @@
 package com.wambua.org.views;
-
 import com.wambua.org.dao.DatabaseAccessObjects;
 import com.wambua.org.dao.javaconnect;
 import com.wambua.org.services.BusBookingService;
 import com.wambua.org.utils.DataProcessingUtils;
+import com.wambua.org.utils.DateAndTimeUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import sun.util.calendar.LocalGregorianCalendar.Date;
 
 public class ClientHome extends javax.swing.JFrame {
 
@@ -18,8 +24,11 @@ public class ClientHome extends javax.swing.JFrame {
     ResultSet rs;
     PreparedStatement pst;
     String busname;
+    String TravelDate;
+    Integer seatNo;
     Boolean proceedWithBooking = false;
     Boolean bussIsFilled = false;
+    Boolean isBooked = false;
     String depertureDate;
     String normal_fare;
     String vip_fare;
@@ -33,46 +42,62 @@ public class ClientHome extends javax.swing.JFrame {
     public ClientHome() {
         super("Home");
         initComponents();
-        conn = javaconnect.ConnectrDb();
+        conn = javaconnect.ConnectDb();
         busname = (String) busNameCombo.getSelectedItem();
-
+        TravelDate = ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText();
+        depertureDate = ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText();
+        DateTextField.setText(new java.util.Date().toString());
     }
 
     public void Search() {
         from = (String) fromComboBox.getSelectedItem();
         destination = (String) destinationCombo.getSelectedItem();
-        depertureDate = ((JTextField) dateOfTravelDateChooser.getDateEditor().getUiComponent()).getText();
+        depertureDate = ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText();
         System.err.println(depertureDate);
-        /**
-         * A method to ensure that booking does not exceed before the date of travel is selected in JDAteChooser
-         */
-
+        
         if(depertureDate.equals("")){
             JOptionPane.showConfirmDialog(null,"Please select travel Date","Warning", JOptionPane.ERROR_MESSAGE);
             
         }
-
-        else if (DatabaseAccessObjects.isBookingExists(depertureDate)) {
-            /**
-             * Obtain available buses for selected date and populate in combo
-             */
-            HashSet<String> busNamesSet = DatabaseAccessObjects.getBussNamesBasedOnTravelDate(depertureDate);
-            busNamesSet.forEach(busName -> busNameCombo.addItem(busName));
-           
+        
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            Date date = new Date();
+//            String date1 = dateFormat.format(date);
+            String string1 = "2018-03-20";
+            java.util.Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(string1);
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(date1);
             
-        } else {
-            /**
-             * Populate new buss booking and allow user to book
-             */
-            List<String> busNames = DatabaseAccessObjects.getBussNamesBasedOnTravelDateAndDestination(from, destination, depertureDate);
-            List<String> uniqueBusNames = DataProcessingUtils.getUniqueList(busNames);
-            //uniqueBusNames.forEach(System.out::println); //java 8 streams and lambdas
-            uniqueBusNames.forEach( e -> {
-                busNameCombo.addItem(e);
-            });
-           // BusBookingService.openBookingView(depertureDate, busname, destination, depertureDate);
+            String string2= "2030-12-12";
+            java.util.Date date2 = new SimpleDateFormat("yyyy-MM-dd").parse(string2);
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.setTime(date2);
+            calendar2.add(Calendar.DATE, 1);
+            
+            String someRandomDate = ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText();
+  
+            java.util.Date d = new SimpleDateFormat("yyyy-MM-dd").parse(someRandomDate);            
+            Calendar calendar3 = Calendar.getInstance();
+            calendar3.setTime(d);
+            calendar3.add(Calendar.DATE, 1);
+            
+            java.util.Date x = calendar3.getTime();
+            if(x.after(calendar1.getTime()) && x.before(calendar2.getTime())){
+                if(DatabaseAccessObjects.isBookingExists(depertureDate)){
+                    
+                    List<String> busNamesSet = DatabaseAccessObjects.getBussNamesBasedOnTravelDateAndDestination(from, destination, depertureDate);
+                    busNamesSet.forEach(busName -> busNameCombo.addItem(busName));
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null,"sorry no buses available for the selected date of travel");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Sorry the date selected is absolete please rectify and proceedand!!!");
+            }
+            
+        } catch (Exception e) {
         }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -95,7 +120,8 @@ public class ClientHome extends javax.swing.JFrame {
         fromComboBox = new javax.swing.JComboBox<>();
         destinationCombo = new javax.swing.JComboBox<>();
         busNameCombo = new javax.swing.JComboBox<>();
-        dateOfTravelDateChooser = new com.toedter.calendar.JDateChooser();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        DateTextField = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -176,7 +202,9 @@ public class ClientHome extends javax.swing.JFrame {
             }
         });
 
-        dateOfTravelDateChooser.setDateFormatString("yyyy-MM-dd ");
+        jDateChooser1.setDateFormatString("yyyy-MM-dd");
+
+        DateTextField.setEditable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -225,9 +253,11 @@ public class ClientHome extends javax.swing.JFrame {
                                     .addComponent(destinationCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(dateOfTravelDateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)))
+                                .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)))
+                        .addGap(89, 89, 89)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(DateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -239,9 +269,10 @@ public class ClientHome extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                            .addComponent(fromComboBox))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(fromComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
@@ -249,11 +280,14 @@ public class ClientHome extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(destinationCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(dateOfTravelDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(47, 47, 47)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
@@ -338,7 +372,7 @@ public class ClientHome extends javax.swing.JFrame {
         String deperturePoint = fromComboBox.getSelectedItem().toString();
         String busName = busNameCombo.getSelectedItem().toString();
         String destination = destinationCombo.getSelectedItem().toString();
-        String depertureDate = ((JTextField) dateOfTravelDateChooser.getDateEditor().getUiComponent()).getText();
+        String depertureDate = ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText();
         String depture= depertureTimeTextField.getText();
         /**
          * Check if the bus is selected from Combo if not do not proceed booking
@@ -350,16 +384,17 @@ public class ClientHome extends javax.swing.JFrame {
             
         
        BusBookingService.openBookingView(deperturePoint, busName, destination, depertureDate);
+ //      DatabaseAccessObjects.checkBusSeatBookingStatus(seatNo, busName, from);
 //        DatabaseAccessObjects.updateCoachSeatBookingStatus(WIDTH, bussIsFilled, busname);
-// DatabaseAccessObjects.checkBusSeatBookingStatus(WIDTH, busName, from);
+       //  DatabaseAccessObjects.checkBusSeatBookingStatus(WIDTH, busName, from);
 setVisible(false);
 //        Calendar calendar = jDateChooser1.getCalendar();
 //
 //        /**
 //         * No buses available for selected date --ensure date is in the future
 //         * not past -if future - make db entry with date to initialize booking
-//         */
-//        if (DateAndTimeUtils.parseCalendarToLocalDate(calendar).isBefore(LocalDate.now())) {
+////         */
+//        if (DateAndTimeUtils.parseCalendarToLocalDate(Calendar.getInstance(Locale.ITALY)).isBefore(LocalDate.now())) {
 //            JOptionPane.showMessageDialog(null, "Sorry no buses available for the submitted details ! ! !");
 //            proceedWithBooking = false;
 //        } else if (DateAndTimeUtils.parseCalendarToLocalDate(calendar).isAfter(LocalDate.now())) {
@@ -484,12 +519,13 @@ setVisible(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField DateTextField;
     private javax.swing.JComboBox<String> busNameCombo;
-    private com.toedter.calendar.JDateChooser dateOfTravelDateChooser;
     private javax.swing.JTextField depertureTimeTextField;
     private javax.swing.JComboBox<String> destinationCombo;
     private javax.swing.JComboBox<String> fromComboBox;
     private javax.swing.JButton jButton1;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

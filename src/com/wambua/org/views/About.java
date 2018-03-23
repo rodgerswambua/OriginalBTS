@@ -34,7 +34,7 @@ public class About extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
         jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/01_featured.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/wambua/org/Icons/01_featured.jpg"))); // NOI18N
 
         jLabel2.setBackground(new java.awt.Color(204, 204, 255));
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
@@ -153,10 +153,7 @@ public class About extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Coast Bus Booking system is a system which allows Coast Bus stuff Perform most of activities electronically without
-            the use of manual pen and papers.All actvities are electronised beginning from point of origin , destinstion ,date of travel, customers details
-            upto printing of the travelling receipt.The amazing part of all is that Coast Bus System does not use any data connection making it 
-            suitable even in remote areas.Isnt it great!!!");
+        jTextArea1.setText("Rmajor bus reservstion system is an online ticketing system which makes you book your seat at the comfort of your house.Just by visiting or website ypu will be able to reserve your place.Thats  all.");
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -167,7 +164,6 @@ public class About extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1)
                         .addGap(27, 27, 27))
                     .addGroup(jPanel1Layout.createSequentialGroup()

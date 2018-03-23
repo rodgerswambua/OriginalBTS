@@ -18,7 +18,7 @@ public class Forgot extends javax.swing.JFrame {
     public Forgot() {
         super("Forgot Password");
         initComponents();
-        conn = javaconnect.ConnectrDb();
+        conn = javaconnect.ConnectDb();
     }
  public void Search(){
      String a1 = jTextField1.getText();

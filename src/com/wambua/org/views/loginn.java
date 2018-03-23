@@ -17,7 +17,7 @@ public class loginn extends javax.swing.JFrame {
     public loginn() {
         super("Login");
         initComponents();
-        conn = javaconnect.ConnectrDb();
+        conn = javaconnect.ConnectDb();
     }
 
     @SuppressWarnings("unchecked")
@@ -53,7 +53,7 @@ public class loginn extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(0, 51, 255));
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/login.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/wambua/org/Icons/login.png"))); // NOI18N
         jButton1.setText("Login");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -64,7 +64,7 @@ public class loginn extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(0, 255, 255));
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 0, 204));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/signup.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/wambua/org/Icons/signup.png"))); // NOI18N
         jButton2.setText("SignUp");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,20 +90,20 @@ public class loginn extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 0, 0));
         jLabel4.setText("Trouble Logging into your account? ...");
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/create.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/wambua/org/Icons/create.png"))); // NOI18N
         jLabel5.setText("jLabel5");
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/forgot.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/wambua/org/Icons/forgot.png"))); // NOI18N
         jLabel6.setText("jLabel6");
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/lock.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/wambua/org/Icons/lock.png"))); // NOI18N
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/password.png"))); // NOI18N
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/wambua/org/Icons/password.png"))); // NOI18N
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel9.setText("LOGIN AS :");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Client", "Admin" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Attendant", "Admin" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -116,7 +116,7 @@ public class loginn extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(132, 132, 132)))
@@ -225,7 +225,7 @@ public class loginn extends javax.swing.JFrame {
                        if (rs.next()) {
             
                 switch ((String) jComboBox1.getSelectedItem()){
-                    case "Client":
+                    case "Attendant":
                         
                     setVisible(false);
                     ClientHome ob = new ClientHome();
@@ -234,7 +234,7 @@ public class loginn extends javax.swing.JFrame {
                    
             break;
                     case "Admin":
-                     setVisible(false);  
+                   setVisible(false);  
                    AdminHome obj = new AdminHome();
                    obj.setLocationRelativeTo(null);
                    obj.setVisible(true);

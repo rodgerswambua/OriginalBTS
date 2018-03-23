@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Random;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class Buses extends javax.swing.JFrame {
     Connection conn;
@@ -15,7 +16,7 @@ public class Buses extends javax.swing.JFrame {
     public Buses() {
         super("New bus");
         initComponents();
-        conn = javaconnect.ConnectrDb();
+        conn = javaconnect.ConnectDb();
         Random();
     }
     public void Random(){
@@ -23,7 +24,7 @@ public class Buses extends javax.swing.JFrame {
         jTextField1.setText(" " +rd.nextInt(1000+1));
     }
      private boolean validateFields(){
-        if(jTextField1.getText().isEmpty() | jTextField2.getText().isEmpty() | jTextField3.getText().isEmpty() | jTextField4.getText().isEmpty() | jTextField5.getText().isEmpty() | jTextField6.getText().isEmpty() |jTextField7.getText().isEmpty() | jTextField9.getText().isEmpty()){
+        if(jTextField1.getText().isEmpty() | jTextField2.getText().isEmpty() | jTextField3.getText().isEmpty() | jTextField4.getText().isEmpty() | jTextField5.getText().isEmpty() | jTextField6.getText().isEmpty() |jTextField7.getText().isEmpty() | ((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText().isEmpty()){
             JOptionPane.showMessageDialog(null,"You have a blank Field in your details please correct and proceed.");
             return false;
         }
@@ -53,9 +54,9 @@ public class Buses extends javax.swing.JFrame {
         jTextField5 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jTextField7 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
         jComboBox3 = new javax.swing.JComboBox<>();
         jComboBox4 = new javax.swing.JComboBox<>();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
@@ -100,6 +101,8 @@ public class Buses extends javax.swing.JFrame {
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MOMBASA", "NAIROBI", "KAKAMEGA", "KISUMU", "KITUI", "KIAMBU" }));
 
+        jDateChooser1.setDateFormatString("yyyy-MM-dd");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -126,9 +129,9 @@ public class Buses extends javax.swing.JFrame {
                     .addComponent(jTextField5)
                     .addComponent(jTextField6)
                     .addComponent(jTextField7)
-                    .addComponent(jTextField9)
                     .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -170,11 +173,11 @@ public class Buses extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19))
         );
 
         jButton1.setBackground(new java.awt.Color(0, 0, 255));
@@ -235,7 +238,7 @@ public class Buses extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String sql="Insert into buses (Regno, Bus_Name, Departure, VIP_seat, Normal_seat, VIP_fare, Normal_fare, `From`, Destination, DOT ) values ( ?,?,?,?,?,?,?,?,?,?)";
+        String sql="Insert into buses (Regno, Bus_Name, Departure, VIP_seat, Normal_seat, VIP_fare, Normal_fare, Bfrom, Destination, DOT ) values ( ?,?,?,?,?,?,?,?,?,?)";
         if(validateFields()){
         try{
             pst = conn.prepareStatement(sql);
@@ -248,7 +251,7 @@ public class Buses extends javax.swing.JFrame {
             pst.setString(7,jTextField7.getText());
             pst.setString(8,(String)jComboBox3.getSelectedItem());
             pst.setString(9,(String)jComboBox4.getSelectedItem());
-            pst.setString(10,jTextField9.getText());
+            pst.setString(10,((JTextField) jDateChooser1.getDateEditor().getUiComponent()).getText());
             pst.execute();
             
             JOptionPane.showMessageDialog(null, " New Bus Added in to the system");
@@ -298,6 +301,7 @@ public class Buses extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -317,6 +321,5 @@ public class Buses extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }
